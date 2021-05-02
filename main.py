@@ -92,7 +92,7 @@ def label_to_color(label):
 def main():
 	plt.figure
 
-	plt.figure(figsize=(10,4))
+	plt.figure(figsize=(9,5))
 	plt.figure = plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
 	ax = plt.axes(projection='3d')
 	plt.axis('off')
