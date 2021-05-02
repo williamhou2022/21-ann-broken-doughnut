@@ -92,7 +92,7 @@ def label_to_color(label):
 def main():
 	plt.figure
 
-	plt.figure(figsize=(10,9))
+	plt.figure(figsize=(10,4))
 	plt.figure = plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
 	ax = plt.axes(projection='3d')
 	plt.axis('off')
@@ -144,28 +144,6 @@ def main():
 	for i in range(len(test_set)):
 		colors[i] = label_to_color(nn.activatePerceptron(test_set[i].point))
 
-	# x = 5
-	# y = 5
-	# X = []
-	# Y = []
-	# _Y = []
-	# __Y = []
-	# z = -10
-	# while z <= 10:
-	# 	X.append(z)
-	# 	value = nn.activatePerceptron([x,y,z])[0][0]
-	# 	Y.append((value - 0.5)**2)
-
-	# 	_Y.append(value - 0.5)
-	# 	z += 0.1
-		
-	# 	slope = (nn.activatePerceptron([x,y,z+0.0000001])[0][0] - nn.activatePerceptron([x,y,z-0.0000001])[0][0]) / 0.0000002
-	# 	__Y.append((value - 0.5) * slope)
-
-	# ax.plot(X, Y)
-	# ax.plot(X, _Y)
-	# ax.plot(X, __Y)
-
 	def plane():
 		x_list = np.linspace(-15,15,15)
 		y_list = np.linspace(-10,10,10)
@@ -181,8 +159,6 @@ def main():
 				z = 0
 				while value < 0.49 or value > 0.51:
 					value = nn.activatePerceptron([x,y,z])[0][0]
-					# slope = (nn.activatePerceptron([x,y,z+0.0000001])[0][0] - nn.activatePerceptron([x,y,z-0.0000001])[0][0]) / 0.0000002
-					# error = rate * (value - 0.5) * - slope
 					error = rate * (value - 0.5)
 					z += error
 					print(value)
@@ -200,84 +176,5 @@ def main():
 
 	plt.show()
 
-def generateCircle(count, outer, inner, label):
-	outputList = []
-	for n in range(count):
-		r = (outer - inner) * math.sqrt(random.random()) + inner
-		theta = 2 * math.pi * random.random()
-		x = r * math.cos(theta)
-		y = r * math.sin(theta)
-		outputList.append(pointD((x,y), label))
-	
-	return outputList
-
-def generateList1(inputList):
-	x = []
-	y = []
-	colors = []
-
-	i = 0
-	while(i < len(inputList)):
-		point = inputList[i]
-		x.append(point.point[0])
-		y.append(point.point[1])
-		colors.append(point.getColor())
-		i += 1
-		
-	return x,y,colors
-
-def main1():
-	plt.figure(figsize=(10,9))
-	ax = plt.axes(projection='3d')
-	
-	training_set = []
-	training_set += generateCircle(100, 1, 0, 0)
-	training_set += generateCircle(100, 3, 2, 1)
-
-	x,y,colors = generateList1(training_set)
-	ax.scatter(x, y, color=colors)
-
-	training_set_in = []
-	training_set_target = []
-	
-	i = 0
-	while(i < len(training_set)):
-		point = training_set[i]
-		training_set_in.append(point.point)
-		training_set_target.append(point.label)
-		i += 1
-
-	# nn = MultiLayerPerceptron(2, 7, 1, (0.03, 0.0, 50000))
-	nn = MultiLayerPerceptron1((0.03, 0.0, 20000), 2, 4, 1)
-	nn.train(training_set_in, training_set_target)
-
-	plt.pause(2)
-	plt.cla()
-
-	test_set = []
-	test_set += generateCircle(100, 1, 0, -1)
-	test_set += generateCircle(100, 3, 2, -1)
-	
-	random.shuffle(test_set)
-
-	x,y,colors = generateList1(test_set)
-	
-	global scat
-	scat = ax.scatter(x, y, color=colors)
-
-	def update(frame):
-		global scat
-		scat.remove()
-		
-		colors[frame] = label_to_color(nn.activatePerceptron(test_set[frame].point))
-		
-		scat = ax.scatter(x, y, color=colors)
-		
-		if frame >= len(colors) - 1:
-			ani.event_source.stop()
-		
-	ani = FuncAnimation(plt.gcf(), update, interval=1)
-
-	plt.show()
-
-main1()
+if __name__ == "__main__":
+  main()
